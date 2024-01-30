@@ -1,6 +1,6 @@
 #include <string>
 #include <vector>
-#include <LesData2.h>
+#include "../LesData2.h"
 using namespace std;
 
 struct Restaurant {
@@ -47,21 +47,43 @@ void nyRestaurant(){
 }
 
 void restaurantLesData(Restaurant & restaurant){
-    cout << "Hva heter resturanten: ";
+    cout << "\tHva heter resturanten: ";
     getline(cin, restaurant.navn);
-    cout << "\nHva er adressen: ";
+    cout << "\tHva er adressen: ";
     getline(cin, restaurant.adresse);
-    cout << "\nHva er typen: ";
+    cout << "\tHva er typen: ";
     getline(cin, restaurant.type);
-    cout << "\nHar du en omtale: ";
+    cout << "\tHar du en omtale: ";
     getline(cin, restaurant.omtale);
-    restaurant.terningkast = lesInt("\nHva er terningkastet", 1, 6);
-    cout << "\n\n";
+    restaurant.terningkast = lesInt("Hva er terningkastet", 1, 6);
+    cout << "\n";
+}
+
+void skrivAlleRestauranter(){
+    for(Restaurant* res : gRestauranter){
+        restaurantSkrivData(res);
+    }
+}
+
+void restaurantSkrivData(const Restaurant* restaurant){
+    cout << "\tNavn: " << restaurant->navn << "\n"
+         << "\tAdressse: " << restaurant->adresse << "\n"
+         << "\tType: " << restaurant->type << "\n"
+         << "\tOmtale: " << restaurant->omtale << "\n"
+         << "\tTerningkast: " << restaurant->terningkast << "\n\n";
+}
+
+void skrivMeny(){
+    cout << "Her kan du legge til og andmelde restauranter du har vert på. \n"
+            "Komandoer:\n"
+            "N - Legg til en ny restaurant\n"
+            "S - Skriv ut alle restaurantene\n"
+            "Q - Avslutt programmet\n\n";
 }
 
 void slettAlt(){
     for(Restaurant* &res : gRestauranter){
         delete res;
-        res = nullptr;
     }
+    gRestauranter.clear();
 }
