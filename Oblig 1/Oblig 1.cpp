@@ -63,11 +63,11 @@ void nyRestaurant(){
 void restaurantLesData(Restaurant & restaurant){
     cout << "\tHva heter resturanten: ";
     getline(cin, restaurant.navn);
-    cout << "\tHva er adressen: ";
+    cout << "\tHva er adressen:       ";
     getline(cin, restaurant.adresse);
-    cout << "\tHva er typen: ";
+    cout << "\tHva er typen:          ";
     getline(cin, restaurant.type);
-    cout << "\tHar du en omtale: ";
+    cout << "\tHar du en omtale:      ";
     getline(cin, restaurant.omtale);
     restaurant.terningkast = lesInt("Hva er terningkastet", 1, 6);
     cout << "\n";
@@ -100,10 +100,10 @@ void restaurantSkrivData(const Restaurant* restaurant){
 */
 void skrivMeny(){
     cout << "Her kan du legge til og andmelde restauranter du har vert på. \n"
-            "Komandoer:\n"
-            "N - Legg til en ny restaurant\n"
-            "S - Skriv ut alle restaurantene\n"
-            "Q - Avslutt programmet\n\n";
+            "\tKomandoer:\n"
+            "\tN - Legg til en ny restaurant\n"
+            "\tS - Skriv ut alle restaurantene\n"
+            "\tQ - Avslutt programmet\n\n";
 }
 
 /**
