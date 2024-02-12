@@ -1,3 +1,9 @@
+ /**
+  *  Program som holder oversikt over besøkte resturanter og omtalelser
+  * 
+  *   @file     Oblig 1.CPP      (basert noe på Program 7-9 og 7-10 i læreboka)
+  *   @author   Gjermund Pedersen
+  */
 #include <string>
 #include <vector>
 #include "../LesData2.h"
@@ -41,11 +47,19 @@ int main(){
     slettAlt();
 }
 
+/**
+ * @brief Legger inn en ny restaurant og omtale
+*/
 void nyRestaurant(){
     gRestauranter.push_back(new Restaurant);
     restaurantLesData(*gRestauranter.back());
 }
 
+/**
+ * @brief Leser inn dataen om restauranten
+ * 
+ * @param restaurant - Restauranten som dataen skal leses inn i
+*/
 void restaurantLesData(Restaurant & restaurant){
     cout << "\tHva heter resturanten: ";
     getline(cin, restaurant.navn);
@@ -59,20 +73,31 @@ void restaurantLesData(Restaurant & restaurant){
     cout << "\n";
 }
 
+/**
+ * @brief Skriver ut alle de lagrede restaurantene
+*/
 void skrivAlleRestauranter(){
     for(Restaurant* res : gRestauranter){
         restaurantSkrivData(res);
     }
 }
 
+/**
+ * @brief Skriver ut dataen til den medsendte restauranten
+ * 
+ * @param restaurant - Restauranten som skal skal skrives ut
+*/
 void restaurantSkrivData(const Restaurant* restaurant){
-    cout << "\tNavn: " << restaurant->navn << "\n"
-         << "\tAdressse: " << restaurant->adresse << "\n"
-         << "\tType: " << restaurant->type << "\n"
-         << "\tOmtale: " << restaurant->omtale << "\n"
-         << "\tTerningkast: " << restaurant->terningkast << "\n\n";
+    cout << "\tNavn: " << setw(20) << restaurant->navn << "\n"
+         << "\tAdressse: " << setw(16) << restaurant->adresse << "\n"
+         << "\tType: " << setw(20) << restaurant->type << "\n"
+         << "\tOmtale: " << setw(18) << restaurant->omtale << "\n"
+         << "\tTerningkast: " << setw(13) << restaurant->terningkast << "\n\n";
 }
 
+/**
+ * @brief Skriver ut menyen med kommandoene
+*/
 void skrivMeny(){
     cout << "Her kan du legge til og andmelde restauranter du har vert på. \n"
             "Komandoer:\n"
@@ -81,6 +106,9 @@ void skrivMeny(){
             "Q - Avslutt programmet\n\n";
 }
 
+/**
+ * @brief Sletter alle de lagrede dataene
+*/
 void slettAlt(){
     for(Restaurant* &res : gRestauranter){
         delete res;
