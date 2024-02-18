@@ -5,6 +5,9 @@ using namespace std;
 
 void skrivMeny();
 
+/**
+ * Dyr (med navn - ABSTRAKT baseklasse for 'DyrIVann' og 'DyrILuft')
+ */
 class Dyr{
     private:
         string navn;
@@ -16,17 +19,20 @@ class Dyr{
             this->navn = navn;
         };
         void lesData(){
-            cout << "Navn: ";
+            cout << "\tNavn: ";
             getline(cin, navn);
         };
         void skrivData(){
-            cout << "Navn: " << navn << '\n';
+            cout << "\tNavn: " << navn << '\n';
         };
 };
 
+/**
+ * Dyrene i vann (med vekt - ABSTRAKT klasse for 'Fisk' og 'Skalldyr')
+ */
 class DyrIVann : public Dyr{
     private:
-        string vekt;
+        int vekt;
     public:
         DyrIVann(){
             lesData();
@@ -35,15 +41,19 @@ class DyrIVann : public Dyr{
             lesData();
         };
         void lesData(){
-            cout << "Vekt: ";
-            getline(cin, vekt);
+            cout << "\tVekt: ";
+            vekt = lesInt("Vekt", 0, 1000);
         };
         void skrivData(){
             Dyr::skrivData();
-            cout << "Vekt: " << vekt << '\n';
+            cout << "\tVekt: " << vekt << '\n';
         };
 };
 
+/**
+ * Fisk (med farge)
+ * 
+ */
 class Fisk : public DyrIVann{
     private:
         string farge;
@@ -55,34 +65,40 @@ class Fisk : public DyrIVann{
             lesData();
         };
         void lesData(){
-            cout << "Farge: ";
+            cout << "\tFarge: ";
             getline(cin, farge);
         };
         void skrivData(){
             cout << "Fisk:\n";
             DyrIVann::skrivData();
-            cout << "Farge: " << farge << '\n';
+            cout << "\tFarge: " << farge << '\n';
         };
 };
 
+/**
+ * Skalldyr (med område du finner den)
+ */
 class Skalldyr : public DyrIVann{
     private:
-        string område;
+        string omraade;
     public:
         Skalldyr(){
             lesData();
         };
         void lesData(){
-            cout << "Område: ";
-            getline(cin, område);
+            cout << "\tOmråde den finnes: ";
+            getline(cin, omraade);
         };
         void skrivData(){
             cout << "Skalldyr:\n";
             DyrIVann::skrivData();
-            cout << "Område" << område << '\n';
+            cout << "\tOmråde den finnes: " << omraade << '\n';
         };
 };
 
+/**
+ * Dyr i luft (med migrerer - ABSTRAKT klasse for 'Fugl' og 'Insekt')
+ */
 class DyrILuft : public Dyr{
     private:
         bool migrerer;
@@ -91,17 +107,19 @@ class DyrILuft : public Dyr{
             lesData();
         };
         void lesData(){
-            cout << "Migrerer (y/n): ";
-            string temp;
-            getline(cin, temp);
-            migrerer = (temp == "y");
+            char temp;
+            temp = lesChar("\tMigrerer (y/n)");
+            migrerer = (temp == 'Y');
         };
         void skrivData(){
             Dyr::skrivData();
-            cout << "Migerer: " << (migrerer ? "ja" : "nei") << '\n';
+            cout << "\tMigerer: " << (migrerer ? "ja" : "nei") << '\n';
         };
 };
 
+/**
+ * Fugl (med vingespenn)
+ */
 class Fugl : public DyrILuft{
     private:
         int vingespenn;
@@ -110,15 +128,18 @@ class Fugl : public DyrILuft{
             lesData();
         };
         void lesData(){
-            vingespenn = lesInt("Vingespenn", 0, 100);
+            vingespenn = lesInt("\tVingespenn", 0, 100);
         };
         void skrivData(){
             cout << "Fugl:\n";
             DyrILuft::skrivData();
-            cout << "Vingespenn: " << vingespenn << '\n';
+            cout << "\tVingespenn: " << vingespenn << '\n';
         };
 };
 
+/**
+ * Insekt (med antall ben)
+ */
 class Insekt : public DyrILuft{
     private:
         int antallBen;
@@ -127,15 +148,18 @@ class Insekt : public DyrILuft{
             lesData();
         };
         void lesData(){
-            antallBen = lesInt("Antall ben", 0, 100);
+            antallBen = lesInt("\tAntall ben", 0, 100);
         };
         void skrivData(){
             cout << "Insekt:\n";
             DyrILuft::skrivData();
-            cout << "AntallBen: " << antallBen << '\n';
+            cout << "\tAntallBen: " << antallBen << '\n';
         };
 };
 
+/**
+ * Hovedprogrammet: 
+ */
 int main(){
     skrivMeny();
     char kommando = lesChar("Skriv en kommando");
@@ -144,7 +168,7 @@ int main(){
         switch (kommando){
         case 'F':{
             string navn;
-            cout << "Navn: ";
+            cout << "\tNavn: ";
             getline(cin, navn);
             if (navn.size() == 0){
                 Fisk* fisk = new Fisk;
@@ -162,28 +186,34 @@ int main(){
             Insekt* insekt = new Insekt;
             insekt->skrivData();
             delete insekt;
-            break;}
+            break;
+        }
         case 'S':{
             Skalldyr* skalldyr = new Skalldyr;
             skalldyr->skrivData();
             delete skalldyr;
-            break;}
+            break;
+        }
         case 'U':{
             Fugl* fugl = new Fugl;
             fugl->skrivData();
-            break;}
+            break;
+        }
         default:{
             skrivMeny();
-            break;}
-        }
+            break;
+        }}
         kommando = lesChar("Skriv en kommando");
     }
 }
 
+/**
+ * Sriver ut menyen
+ */
 void skrivMeny(){
-    cout << "\tF: Fisk\n\
-             \tI: Insekt\n\
-             \tS: Skalldyr\n\
-             \tU: Fugl\n\
-             \tQ: Avslutt\n";
+    cout << "\tF: Fisk\n"
+         << "\tI: Insekt\n"
+         << "\tS: Skalldyr\n"
+         << "\tU: Fugl\n"
+         << "\tQ: Avslutt\n";
 }
