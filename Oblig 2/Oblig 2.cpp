@@ -1,3 +1,11 @@
+/**
+ * Et program som oppretter objektene for ulike typer dyr og leser og 
+ * skriver ut dataene til disse.
+ * 
+ * @file Oblig 2.cpp
+ * @author your name (you@domain.com) 
+ */
+
 #include <string>
 #include <iostream>
 #include "../LesData2.h"
