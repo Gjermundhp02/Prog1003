@@ -182,6 +182,7 @@ void Student::endreData() {
             stp = lesFloat("Studiepoeng", 0, 100);
             break;
     }
+    skrivData();
 }
 
 
@@ -252,6 +253,7 @@ void Ansatt::endreData() {
             lonn = lesInt("Lønn", 0, 1000000);
             break;
     }
+    skrivData();
 }
 
 
