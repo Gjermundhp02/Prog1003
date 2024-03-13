@@ -9,8 +9,8 @@
  *       - endre data om en gitt student/ansatt
  *       - HELE datastrukturen leses fra/skrives til fil
  *
- *   @file    OBLIG3.TPL
- *   @author  Frode Haug, NTNU
+ *   @file    oblig3.cpp
+ *   @author  Gjermund H Pedersen
  */
 
 
@@ -302,7 +302,14 @@ void Ansatt::skrivTilFil(ofstream & ut) const {
  *  @see   virtual Person::endreData()
  */
 void endreEnPerson() {
-    int svar = lesInt("Hvem sin data vil du endre", 1, 100000);
+    int svar;
+    while (true){
+        svar = lesInt("Hvem sin data vil du endre", 1, 100000);
+        if (gPersoner.find(svar) != gPersoner.end()){
+            break; // Looper til brukeren skriver inn et gyldig id
+        }
+        cout << "Fant ikke personen\n";
+    }
     gPersoner.find(svar)->second->endreData();
 }
 
@@ -314,20 +321,24 @@ void lesFraFil() {
     ifstream innfil = ifstream("oblig3.dta");
 
     if (innfil){
-        int aNr;
-        innfil >> aNr;
+        int id;
+        innfil >> id;
         while (!innfil.eof()){
             char type;
             innfil >> type;
-            innfil.ignore();
+            innfil.ignore(); // Ignorer mellomrom
             if (type == 'S'){
-                gPersoner.insert({aNr, new Student(innfil)});
+                gPersoner.insert({id, new Student(innfil)});
             } else {
-                gPersoner.insert({aNr, new Ansatt(innfil)});
+                gPersoner.insert({id, new Ansatt(innfil)});
             }
-            innfil >> aNr;
+            innfil >> id;
         }
     }
+    else{
+        cout << "Fant ikke filen\n";
+    }
+    innfil.close();
 }
 
 
@@ -338,18 +349,27 @@ void lesFraFil() {
  */
 void nyPerson() {
     char svar = lesChar("S - Student, A - Ansatt");
-    map<int, Person*>::iterator pt;
     Person* person;
+    int id;
 
     if (svar == 'S') {
-        person = new Student;
-        pt = gPersoner.end();
-    } else {
-        person = new Ansatt;
-        pt = gPersoner.upper_bound(1000);
+        do{
+            id = lesInt("IdNr", 1001, 100000);
+            // Sjekker om brukeren allerede finnes
+        }while (gPersoner.find(id) != gPersoner.end());
+        gPersoner.insert({id, new Student}); 
+        gPersoner.at(id)->lesData(); // Get the data from the user
+    } 
+    else if (svar == 'A') {
+        do{
+            id = lesInt("IdNr", 1, 1000);
+        }while (gPersoner.find(id) != gPersoner.end());
+        gPersoner.insert({id, new Ansatt});
+        gPersoner.at(id)->lesData();
     }
-    person->lesData();
-    gPersoner.insert({(--pt)->first+1, person});
+    else {
+        cout << "Ugyldig valg\n";
+    }
 }
 
 
@@ -386,6 +406,7 @@ void skrivMeny() {
 void skrivTilFil() {
     ofstream utfil = ofstream("oblig3.dta");
     for (const auto & val : gPersoner){
+        // Skriv ut id og om det er en ansatt eller student
         utfil << val.first << ' ' << (val.first<1001 ? 'A' : 'S') << ' ';
         val.second->skrivTilFil(utfil);
     }
